@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using WebApplication2.Contexts;
 using WebApplication2.DTO;
 
@@ -11,10 +12,12 @@ namespace WebApplication2.Pages
         [BindProperty]
         public Factory Factory { get; set; }
         private TestContext _context;
+        private readonly IDistributedCache _cache;
 
-        public EditFactoryModel(TestContext context)
+        public EditFactoryModel(TestContext context, IDistributedCache cache)
         {
             _context = context;
+            _cache = cache;
         }
        
         public IActionResult OnGet(int id)
@@ -46,6 +49,7 @@ namespace WebApplication2.Pages
             
             _context.Factories.Update(factoryToUpdate);
             _context.SaveChanges();
+            _cache.RemoveAsync("FactoriesList");
             return RedirectToPage("/Factories");
         }
     }

@@ -9,11 +9,13 @@ namespace WebApplication2.Services
     {
         private readonly IDistributedCache _cache;
         private readonly TestContext _context;
+        private readonly ILogger<GenericService<T>> _logger;
 
-        public GenericService(IDistributedCache cache, TestContext context)
+        public GenericService(IDistributedCache cache, TestContext context, ILogger<GenericService<T>> logger)
         {
             _cache = cache;
             _context = context;
+            _logger = logger;
         }
 
         
@@ -25,13 +27,15 @@ namespace WebApplication2.Services
         public async Task<List<T>> LoadEntitiesAsync(string cacheKey)
         {
             var cachedData = await _cache.GetStringAsync(cacheKey);
-            if (cachedData == null)
+            if (cachedData != null)
             {
-                Console.WriteLine($"Get data from Cache for {cacheKey}");
-                return JsonSerializer.Deserialize<List<T>>(cachedData);
+                _logger.LogInformation($"Data retrieved from cache for {cacheKey}");
+                Console.WriteLine($"{cacheKey} data is: {cachedData}");
+                return JsonSerializer.Deserialize<List<T>>(cachedData) ?? new List<T>();
             }
 
             var entities = _context.Set<T>().ToList();
+            _logger.LogInformation($"Data retrieved from database for {cacheKey}");
             var cacheOptions = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(20));
             await _cache.SetStringAsync(cacheKey, JsonSerializer.Serialize(entities), cacheOptions);
             

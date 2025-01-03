@@ -6,14 +6,14 @@ namespace WebApplication2.Pages
 {
     public class FactoriesModel : PageModel
     {
-        private IRepositoryService _factoryService;
+        private IRepositoryService<Factory> _factoryService;
         private ISortingService _sortingService;
 
         public List<Factory> Factories { get; set; }
         public string SortColumn { get; set; } = "Id";
         public string SortDirection { get; set; } = "asc";
 
-        public FactoriesModel(IRepositoryService factoryService, ISortingService sortingService)
+        public FactoriesModel(IRepositoryService<Factory> factoryService, ISortingService sortingService)
         {
             _factoryService = factoryService;
             _sortingService = sortingService;
@@ -23,7 +23,7 @@ namespace WebApplication2.Pages
         {
             SortColumn = sortColumn == null ? "Id" : sortColumn;
             SortDirection = sortDirection == null ? "asc" : sortDirection;
-            Factories =  await _factoryService.LoadFactoriesAsync();
+            Factories =  await _factoryService.LoadEntitiesAsync("FactoriesList");
             Factories = _sortingService.Sort(Factories, sortColumn, sortDirection);
         }
     }

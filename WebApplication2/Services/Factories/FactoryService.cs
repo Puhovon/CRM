@@ -14,7 +14,7 @@ namespace WebApplication2.Services.Factories
 
         public async Task<List<Factory>> LoadFactoryAsync()
         {
-            return await _repositoryService.LoadEntitiesAsync("Factories");
+            return await _repositoryService.LoadEntitiesAsync("FactoriesList");
         }
     }
 }
