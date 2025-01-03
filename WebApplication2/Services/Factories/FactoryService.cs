@@ -1,51 +1,20 @@
-﻿using System.Text.Json;
-using Microsoft.Extensions.Caching.Distributed;
-using WebApplication2.Contexts;
-using WebApplication2.DTO;
-using WebApplication2.Services.Factories.Abstractions;
+﻿using WebApplication2.DTO;
+using WebApplication2.Services.Abstractions;
 
 namespace WebApplication2.Services.Factories
 {
-    public class FactoryService : IFactoryService
+    public class FactoryService
     {
-        private List<Factory> _factories;
-        private readonly IDistributedCache _cache;
-        private readonly TestContext _dbContext;
+        private readonly IRepositoryService<Factory> _repositoryService;
 
-        public FactoryService(IDistributedCache cache, TestContext dbContext)
+        public FactoryService(IRepositoryService<Factory> repositoryService)
         {
-            _cache = cache;
-            _dbContext = dbContext;
+            _repositoryService = repositoryService;
         }
 
-        public List<Factory> LoadFactories()
+        public async Task<List<Factory>> LoadFactoryAsync()
         {
-            using (var context = new TestContext())
-            {
-                _factories = context.Factories.ToList();
-            }
-            return _factories;
-        }
-
-        public async Task<List<Factory>> LoadFactoriesAsync()
-        {
-            const string cacheKey = "FactoriesList";
-
-            var cachedData = await _cache.GetStringAsync(cacheKey);
-            if (cachedData != null)
-            {
-                Console.WriteLine("Get data from Cahce");
-                return JsonSerializer.Deserialize<List<Factory>>(cachedData);
-            }
-
-            var factories = _dbContext.Factories.ToList();
-
-            var cacheOptions = new DistributedCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromSeconds(20));
-            await _cache.SetStringAsync(cacheKey, JsonSerializer.Serialize(factories), cacheOptions);
-            Console.WriteLine("Get data from DB");
-
-            return factories;
+            return await _repositoryService.LoadEntitiesAsync("Factories");
         }
     }
 }

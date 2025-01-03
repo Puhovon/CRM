@@ -1,4 +1,4 @@
-﻿using WebApplication2.Services.Factories.Abstractions;
+﻿using WebApplication2.Services.Abstractions;
 
 namespace WebApplication2.Services.Factories
 {

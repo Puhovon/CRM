@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Contexts;
+using WebApplication2.Services.Abstractions;
 using WebApplication2.Services.Factories;
-using WebApplication2.Services.Factories.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<IFactoryService, FactoryService>();
+//builder.Services.AddScoped<IRepositoryService, FactoryService>();
 builder.Services.AddScoped<ISortingService, SortingService>();
 builder.Services.AddStackExchangeRedisCache(options =>
 {
