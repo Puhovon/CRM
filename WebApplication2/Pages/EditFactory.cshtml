@@ -1,0 +1,22 @@
+﻿@page "/EditFactory/{id}"
+@model WebApplication2.Pages.EditFactoryModel
+
+<h2>Редактирование фабрики</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="name">Название</label>
+        <input type="text" class="form-control" id="name" name="Name" value="@Model.Factory.Name">
+    </div>
+    <div class="form-group">
+        <label for="description">Описание</label>
+        <textarea class="form-control" id="description" name="Description">@Model.Factory.Description</textarea>
+    </div>
+    <div class="form-group">
+        <label for="description">Описание</label>
+        <textarea class="form-control" id="description" name="Production">@Model.Factory.Production</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="/" class="btn btn-secondary">Отмена</a>
+</form>

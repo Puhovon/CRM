@@ -1,0 +1,32 @@
+﻿@page
+@model WebApplication2.Pages.FactoriesModel
+@{
+	var SortColumn = Model.SortColumn;
+	var SortDirection = Model.SortDirection;
+}
+<table>
+	<thead>
+		<tr>
+			<td><a href="?sortColumn=Id&sortDirection=@(SortColumn == "Id" && SortDirection == "asc" ? "desc" : "asc")">Id</a></td>
+			<td><a href="?sortColumn=Name&sortDirection=@(SortColumn == "Name" && SortDirection == "asc" ? "desc" : "asc")">Name</a></td>
+			<td><a href="?sortColumn=Description&sortDirection=@(SortColumn == "Description" && SortDirection == "asc" ? "desc" : "asc")">Description</a></td>
+			<td><a href="?sortColumn=Production&sortDirection=@(SortColumn == "Production" && SortDirection == "asc" ? "desc" : "asc")">Product</a></td>
+			<td><a href="?sortColumn=Createdat&sortDirection=@(SortColumn == "Createdat" && SortDirection == "asc" ? "desc" : "asc")">Created Date</a></td>
+			<td>Edit</td>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var factory in Model.Factories) {
+			<tr>
+				<td>@factory.Id</td>
+				<td>@factory.Name</td>
+				<td>@factory.Description</td>
+				<td>@factory.Production</td>
+				<td>@factory.Createdat</td>
+				<td><a href="/EditFactory/@factory.Id" class="btn btn-primary">Редактировать</a></td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+
